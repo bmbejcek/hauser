@@ -3,7 +3,6 @@ package warehouse
 import (
 	"context"
 	"database/sql"
-	"errors"
 	"fmt"
 	"log"
 	"os"
@@ -71,13 +70,6 @@ func (rs *Redshift) getSchemaParameter() string {
 	return fmt.Sprintf("'%s'", rs.conf.Redshift.TableSchema)
 }
 
-func (rs *Redshift) validateSchemaConfig() error {
-	if rs.conf.Redshift.TableSchema == "" {
-		return errors.New("TableSchema definition missing from Redshift configuration. More information: https://www.hauserdocs.io")
-	}
-	return nil
-}
-
 // GetExportTableColumns returns all the columns of the export table.
 // It opens a connection and calls getTableColumns
 func (rs *Redshift) GetExportTableColumns() []string {
@@ -109,7 +101,7 @@ func (rs *Redshift) ValueToString(val interface{}, isTime bool) string {
 }
 
 func (rs *Redshift) MakeRedshiftConnection() (*sql.DB, error) {
-	if err := rs.validateSchemaConfig(); err != nil {
+	if err := rs.conf.Redshift.ValidateTableSchema(); err != nil {
 		log.Fatal(err)
 	}
 	url := fmt.Sprintf("user=%v password=%v host=%v port=%v dbname=%v",

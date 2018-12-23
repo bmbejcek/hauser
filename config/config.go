@@ -3,6 +3,7 @@ package config
 import (
 	"io/ioutil"
 	"time"
+	"errors"
 
 	"github.com/BurntSushi/toml"
 )
@@ -36,6 +37,10 @@ type S3Config struct {
 	S3Only  bool
 }
 
+type RedshiftValidator interface {
+	ValidateTableSchema() error
+}
+
 type RedshiftConfig struct {
 	Host        string
 	Port        string
@@ -47,6 +52,13 @@ type RedshiftConfig struct {
 	TableSchema string
 	Credentials string
 	VarCharMax  int
+}
+
+func (rsconf RedshiftConfig) ValidateTableSchema() error {
+	if rsconf.TableSchema == "" {
+		return errors.New("TableSchema definition missing from Redshift configuration. More information: https://www.hauserdocs.io")
+	}
+	return nil
 }
 
 type GCSConfig struct {
