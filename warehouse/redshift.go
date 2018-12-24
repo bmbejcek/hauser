@@ -100,8 +100,8 @@ func (rs *Redshift) ValueToString(val interface{}, isTime bool) string {
 	return s
 }
 
-func (rs *Redshift) MakeRedshiftConnection() (*sql.DB, error) {
-	if err := rs.conf.Redshift.ValidateTableSchema(); err != nil {
+func (rs Redshift) MakeRedshiftConnection() (*sql.DB, error) {
+	if err := rs.conf.Redshift.RedshiftValidator.ValidateTableSchema(); err != nil {
 		log.Fatal(err)
 	}
 	url := fmt.Sprintf("user=%v password=%v host=%v port=%v dbname=%v",

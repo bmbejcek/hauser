@@ -52,10 +52,15 @@ type RedshiftConfig struct {
 	TableSchema string
 	Credentials string
 	VarCharMax  int
+	RedshiftValidator
 }
 
-func (rsconf RedshiftConfig) ValidateTableSchema() error {
-	if rsconf.TableSchema == "" {
+type Validator struct {
+	TableSchema string
+}
+
+func (v Validator) ValidateTableSchema() error {
+	if v.TableSchema == "" {
 		return errors.New("TableSchema definition missing from Redshift configuration. More information: https://www.hauserdocs.io")
 	}
 	return nil
@@ -93,6 +98,10 @@ func Load(filename string) (*Config, error) {
 
 	if _, err := toml.Decode(string(tomlData), &conf); err != nil {
 		return nil, err
+	}
+
+	conf.Redshift.RedshiftValidator = &Validator{
+		TableSchema: conf.Redshift.TableSchema,
 	}
 
 	return &conf, nil
