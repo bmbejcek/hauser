@@ -1,9 +1,9 @@
 package config
 
 import (
+	"errors"
 	"io/ioutil"
 	"time"
-	"errors"
 
 	"github.com/BurntSushi/toml"
 )

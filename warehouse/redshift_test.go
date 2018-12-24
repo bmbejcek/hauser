@@ -219,14 +219,13 @@ func TestSchemaParameterFetch(t *testing.T) {
 }
 
 type FakeValidator struct {
-	didRun bool	
+	didRun bool
 }
 
 func (fv *FakeValidator) ValidateTableSchema() error {
 	fv.didRun = true
 	return nil
 }
-
 
 func TestValidateTableSchema(t *testing.T) {
 	conf := makeConf("test")
@@ -235,7 +234,7 @@ func TestValidateTableSchema(t *testing.T) {
 
 	wh := NewRedshift(conf)
 	wh.MakeRedshiftConnection()
-	
+
 	if !fv.didRun {
 		t.Errorf("Expected ValidateTableSchema() to be invoked in MakeRedshiftConnection()")
 	}

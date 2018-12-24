@@ -2,7 +2,6 @@ package config
 
 import (
 	"testing"
-
 )
 
 func makeValidator(tableSchema string) *Validator {
@@ -14,22 +13,22 @@ func makeValidator(tableSchema string) *Validator {
 func TestValidateTableSchemaConfig(t *testing.T) {
 
 	testCases := []struct {
-		validator       *Validator
+		validator  *Validator
 		hasError   bool
 		errMessage string
 	}{
 		{
-			validator:       makeValidator(""),
+			validator:  makeValidator(""),
 			hasError:   true,
 			errMessage: "TableSchema definition missing from Redshift configuration. More information: https://www.hauserdocs.io",
 		},
 		{
-			validator:       makeValidator("test"),
+			validator:  makeValidator("test"),
 			hasError:   false,
 			errMessage: "",
 		},
 		{
-			validator:       makeValidator("search_path"),
+			validator:  makeValidator("search_path"),
 			hasError:   false,
 			errMessage: "",
 		},
